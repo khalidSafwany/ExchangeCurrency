@@ -18,8 +18,11 @@ class mainViewController: UIViewController {        // main controller class of 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        if(!fetched){
         readCountriesFileData()
         callAlamo(url:url )
+        }
+        
     
     }
     
@@ -33,26 +36,27 @@ class mainViewController: UIViewController {        // main controller class of 
         
         AF.request(url).responseJSON(completionHandler:{
             response in
-            
-            
             self.parseData(JSONData: response.data!)
             
         }  )
         
     }
     
+    
+    
     func parseData(JSONData : Data){        // parsing the JSON date to the values of currencies struct
         do{
             valuesList = [try JSONDecoder().decode(ValuesOfCurrenciesInUSD.self, from: JSONData)]
-            
-        
     }catch {
     
     print(error)
         }
         
         mirgeValuesToCountries()
-        //print(countries)
+        calculateEntries()
+        
+        fetched = true
+        
     }
     
     func readCountriesFileData(){           // read file of counties code and etc....

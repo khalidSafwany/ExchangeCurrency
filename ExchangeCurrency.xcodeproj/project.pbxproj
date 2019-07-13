@@ -145,16 +145,16 @@
 		FEDDCE2E22D0EA4800807847 /* ExchangeCurrency */ = {
 			isa = PBXGroup;
 			children = (
-				FEDDCE6122D0F3E300807847 /* AppDelegate.swift */,
-				FEDDCE3122D0EA4800807847 /* MainViewController.swift */,
 				FEDDCE3322D0EA4800807847 /* Main.storyboard */,
-				FEDDCE3622D0EA4900807847 /* Assets.xcassets */,
-				FEDDCE3822D0EA4900807847 /* LaunchScreen.storyboard */,
-				FEDDCE5D22D0EFFD00807847 /* currnciesList.json */,
-				FEDDCE3B22D0EA4900807847 /* Info.plist */,
+				FEDDCE3122D0EA4800807847 /* MainViewController.swift */,
 				FEDDCE5F22D0F25300807847 /* Exchange.swift */,
 				FED1E81C22D3B24C00D5A8E8 /* AllCountriesTableViewController.swift */,
 				FED1E81E22D3B71F00D5A8E8 /* AllCountriesTableViewCell.swift */,
+				FEDDCE3822D0EA4900807847 /* LaunchScreen.storyboard */,
+				FEDDCE5D22D0EFFD00807847 /* currnciesList.json */,
+				FEDDCE6122D0F3E300807847 /* AppDelegate.swift */,
+				FEDDCE3622D0EA4900807847 /* Assets.xcassets */,
+				FEDDCE3B22D0EA4900807847 /* Info.plist */,
 			);
 			path = ExchangeCurrency;
 			sourceTree = "<group>";

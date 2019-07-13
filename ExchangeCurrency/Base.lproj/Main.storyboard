@@ -30,13 +30,14 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <navigationItem key="navigationItem" id="rmG-lR-xiu"/>
                     <connections>
                         <segue destination="fKX-Ii-CaE" kind="presentation" identifier="ShowAllCountries" id="GbH-4b-lbO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="337.68115942028987" y="62.946428571428569"/>
+            <point key="canvasLocation" x="345" y="-196"/>
         </scene>
         <!--All Countries Table View Controller-->
         <scene sceneID="Jjx-Mv-eK6">
@@ -46,12 +47,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <navigationBar key="tableHeaderView" contentMode="scaleToFill" id="mQJ-uP-kG5">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <items>
+                                <navigationItem title="All Countriles" id="Aze-Ux-Ftj">
+                                    <barButtonItem key="rightBarButtonItem" systemItem="done" id="4t3-XC-2fK">
+                                        <connections>
+                                            <action selector="SaveCountriesButton:" destination="fKX-Ii-CaE" id="zFJ-wu-0Dm"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </navigationItem>
+                            </items>
+                        </navigationBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="AllCountriesTableCell" rowHeight="71" id="Ke9-MF-3Od" customClass="AllCountriesTableViewCell" customModule="ExchangeCurrency" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="414" height="71"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="AllCountriesTableCell" rowHeight="65" id="Ke9-MF-3Od" customClass="AllCountriesTableViewCell" customModule="ExchangeCurrency" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="72" width="414" height="65"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ke9-MF-3Od" id="BdJ-1h-IFX">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="70.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="64.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vXo-ug-Igg">
@@ -62,11 +76,11 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LF0-8Y-T6Q">
-                                            <rect key="frame" x="144" y="25" width="195" height="21"/>
+                                            <rect key="frame" x="96" y="25" width="210" height="18"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="195" id="1dP-fL-cVf"/>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="210" id="1dP-fL-cVf"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -75,8 +89,8 @@
                                         <constraint firstItem="vXo-ug-Igg" firstAttribute="top" secondItem="BdJ-1h-IFX" secondAttribute="top" constant="11" id="9Iv-aF-QrY"/>
                                         <constraint firstAttribute="bottom" secondItem="LF0-8Y-T6Q" secondAttribute="bottom" constant="24.5" id="Eey-is-pi4"/>
                                         <constraint firstItem="vXo-ug-Igg" firstAttribute="leading" secondItem="BdJ-1h-IFX" secondAttribute="leading" constant="30" id="Ku9-gN-Cdz"/>
-                                        <constraint firstItem="LF0-8Y-T6Q" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="vXo-ug-Igg" secondAttribute="trailing" constant="8" symbolic="YES" id="dAz-Tr-NmL"/>
-                                        <constraint firstAttribute="trailing" secondItem="LF0-8Y-T6Q" secondAttribute="trailing" constant="75" id="dpp-gf-SPL"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="LF0-8Y-T6Q" secondAttribute="trailing" constant="75" id="R0F-Ze-t4l"/>
+                                        <constraint firstItem="LF0-8Y-T6Q" firstAttribute="leading" secondItem="vXo-ug-Igg" secondAttribute="trailing" constant="8" symbolic="YES" id="dAz-Tr-NmL"/>
                                         <constraint firstAttribute="bottom" secondItem="vXo-ug-Igg" secondAttribute="bottom" constant="10.5" id="jgc-Sn-5Ll"/>
                                         <constraint firstItem="LF0-8Y-T6Q" firstAttribute="top" secondItem="BdJ-1h-IFX" secondAttribute="top" constant="25" id="ocG-kw-oXb"/>
                                     </constraints>
@@ -92,10 +106,13 @@
                             <outlet property="delegate" destination="fKX-Ii-CaE" id="lI5-vn-PEY"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="ReturnToMainView" id="bB2-Zc-S95"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vaX-hA-pkc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1250.7246376811595" y="62.946428571428569"/>
+            <point key="canvasLocation" x="1369.5652173913045" y="-196.20535714285714"/>
         </scene>
     </scenes>
 </document>
