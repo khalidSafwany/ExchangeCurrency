@@ -67,6 +67,7 @@ class AllCountriesTableViewController: UITableViewController {
      override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)  {
         
         if (!entries[keyEntries[indexPath.section]]![indexPath.row].isSelected!){
+            if(choosedCountiesList.count < MAXIMUM_COUNTRIES){
             
             entries[keyEntries[indexPath.section]]![indexPath.row].isSelected = true
            if let cell = tableView.cellForRow(at: indexPath) as? AllCountriesTableViewCell {
@@ -75,11 +76,17 @@ class AllCountriesTableViewController: UITableViewController {
               choosedCountiesList.append(entries[keyEntries[indexPath.section]]![indexPath.row])
             
             
+                }
+          
             }
-          //  print(self.tableView.indexPathForSelectedRow)
+            
+            else{
+                showErrorMessage(errorNO: 10)
+                
+            }
         }
         else{
-            
+            if(choosedCountiesList.count > MINIMUM_COUNTRIES){
             entries[keyEntries[indexPath.section]]![indexPath.row].isSelected = false
             if let cell = tableView.cellForRow(at: indexPath) as? AllCountriesTableViewCell {
                 
@@ -88,10 +95,11 @@ class AllCountriesTableViewController: UITableViewController {
                 
                 
             }
-            
+            }
+            else{
+                showErrorMessage(errorNO: 2)
+            }
         }
- 
-        print(choosedCountiesList)
     
     }
     
@@ -141,4 +149,23 @@ class AllCountriesTableViewController: UITableViewController {
     }
     */
 
+    
+    
+    private func showErrorMessage(errorNO : Int){
+        var alert = UIAlertController(title: "Sorry!", message: "we are glad yoy are using our APP!", preferredStyle:.alert )
+        switch errorNO{
+        case 2:
+            
+            alert = UIAlertController(title: "Sorry!", message: MinimumAlert, preferredStyle:.alert )
+            
+            
+        case 10:
+            alert = UIAlertController(title: "Sorry", message: MaximumAlert, preferredStyle:.alert )
+           
+        default: break
+            
+        }
+        alert.addAction(UIAlertAction(title: "OK",style: .default))
+        self.present(alert, animated: true, completion: nil)
+    }
 }

@@ -7,7 +7,11 @@
 //
 
 import Foundation
+let MinimumAlert = "Sorry, You have reached the minmum number of countries (2). You can't remove more"
+let MaximumAlert = "Sorry, You have reached the maximum number of countries (10). You can't add more"
 
+let MAXIMUM_COUNTRIES = 10
+let MINIMUM_COUNTRIES = 2
 let url = "http://www.apilayer.net/api/live?access_key=13557f9e94479f74ae1b455adf1b62f4" // API of currencies rate
 var countries = [Country]()                                                    // Array of counties with code falg etc..
 var valuesList = [ValuesOfCurrenciesInUSD]()                                  //temp array contains the calues and codes only
@@ -64,8 +68,8 @@ func mirgeValuesToCountries(){              // merging the values to main array 
 }
 
 
-func calculateEntries(){                    // to calculate no of sections in the all countries table
-    var tempChar : Character = "$"
+func calculateEntries(handleComplete : (() -> ()) ){                    // to calculate no of sections in the all countries table
+    var tempChar : Character = "~"
     var selectedCountriesInEntry = [Country]()
     for item in countries{
         
@@ -93,7 +97,7 @@ func calculateEntries(){                    // to calculate no of sections in th
     keyEntries.append(tempChar)
     entries[tempChar] = selectedCountriesInEntry
 
-    
+    handleComplete()
 }
 
 
@@ -106,22 +110,28 @@ func searchForIndexInCoosedCountries(searchCode : String) -> Int?{
 
 // to Set the default Coutries ---------- NOT FINISHED YET
 func defaultSetting(){
-    
+    if (choosedCountiesList.count == 0){
     var myDefaultCountrty = searchForCountryByCode(searchCode: "USD")
     choosedCountiesList.append(myDefaultCountrty)
     myDefaultCountrty = searchForCountryByCode(searchCode: "EUR")
     choosedCountiesList.append(myDefaultCountrty)
     
+    }
+    else
+    {return}
 }
 
 func searchForCountryByCode(searchCode : String) -> Country{
     let notFound = Country(givenCode: "notFound")
-    for item in countries{
-        if item.code.elementsEqual(searchCode){
-            return item
-        }
-    }
+    let firstChar = Array(searchCode)[0]
     
+        for i in 0 ..< (entries[firstChar]!.count){
+            if(entries[firstChar]![i].code.elementsEqual(searchCode)){
+                entries[firstChar]![i].isSelected = true
+                return entries[firstChar]![i]
+            
+        }      
+    }
     return notFound
 }
 

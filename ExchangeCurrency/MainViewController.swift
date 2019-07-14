@@ -20,16 +20,10 @@ class mainViewController: UIViewController {        // main controller class of 
         // Do any additional setup after loading the view.
         if(!fetched){
         readCountriesFileData()
-        callAlamo(url:url )
-        }
-        
-    
+            callAlamo(url:url)
+            
+              }
     }
-    
-    
-    
-    
-    
     
     
     func callAlamo(url : String){       // function to call th API of currencies rate
@@ -53,9 +47,14 @@ class mainViewController: UIViewController {        // main controller class of 
         }
         
         mirgeValuesToCountries()
-        calculateEntries()
+        calculateEntries(){ () -> () in
+            
+            defaultSetting()
+        
+        }
         
         fetched = true
+       
         
     }
     
