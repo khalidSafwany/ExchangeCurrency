@@ -19,36 +19,68 @@ class AllCountriesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //tableView.allowsMultipleSelection = true
+        self.tableView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        
+    
     }
+    
+    
 
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return entries.keys.count
+        return entries.keys.count + 1
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
-        return String(keyEntries[section])
-    }
+        if(section == 0){
+             return "My Countries"
+        }
+       
+            
+        return String(keyEntries[section - 1])
+            
+        
 
+        }
     
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return entries[keyEntries[section]]!.count
+        if (section == 0){
+            return choosedCountiesList.count
+        }
+        print("\(section) : \(entries[keyEntries[section - 1 ]]!.count)")
+        
+        return entries[keyEntries[section - 1 ]]!.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
          let cell = tableView.dequeueReusableCell(withIdentifier: "AllCountriesTableCell", for: indexPath) as? AllCountriesTableViewCell
-        cell?.CountryImage.image = UIImage(named: entries[keyEntries[indexPath.section]]![indexPath.row].flag)
+        if(indexPath.section == 0){
+            
+            cell?.CountryImage.image = UIImage(named: choosedCountiesList[indexPath.row].flag)
+            
+            cell?.CountryNameAndSymbol.text = "\(choosedCountiesList[indexPath.row].code) - \(choosedCountiesList[indexPath.row].name)"
+            
+            if(choosedCountiesList[indexPath.row].isSelected!){
+                   cell?.accessoryType = .checkmark
+            }
+            else{
+                   cell?.accessoryType = .none
+            }
+            
+        }
+        else{
+        cell?.CountryImage.image = UIImage(named: entries[keyEntries[indexPath.section - 1]]![indexPath.row].flag)
         
-        cell?.CountryNameAndSymbol.text = "\(entries[keyEntries[indexPath.section]]![indexPath.row].code) - \(entries[keyEntries[indexPath.section]]![indexPath.row].name)"
+        cell?.CountryNameAndSymbol.text = "\(entries[keyEntries[indexPath.section - 1]]![indexPath.row].code) - \(entries[keyEntries[indexPath.section - 1]]![indexPath.row].name)"
+            
         
-        if(entries[keyEntries[indexPath.section]]![indexPath.row].isSelected!){
+        if(entries[keyEntries[indexPath.section - 1 ]]![indexPath.row].isSelected!){
          
             cell?.accessoryType = .checkmark
         }
@@ -57,7 +89,7 @@ class AllCountriesTableViewController: UITableViewController {
             cell?.accessoryType = .none
             
         }
-        
+        }
       
         return cell!
     }
@@ -66,16 +98,36 @@ class AllCountriesTableViewController: UITableViewController {
     
      override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)  {
         
-        if (!entries[keyEntries[indexPath.section]]![indexPath.row].isSelected!){
+        if(indexPath.section == 0){
+            if(choosedCountiesList.count > MINIMUM_COUNTRIES){
+            let (rowIndex,sectionIndex) = searchForIndexpathInEntries(searchCode: choosedCountiesList[indexPath.row].code)
+            entries[sectionIndex]![rowIndex].isSelected = false
+             var (index, char) = searchForIndexpathInEntries(searchCode: choosedCountiesList[indexPath.row].code)
+            let indexPathInEntry = IndexPath(row: index, section: Int(char.asciiValue! - 65 + 1))
+            choosedCountiesList.remove(at: indexPath.row )
+            ListString.remove(at: indexPath.row)
+            tableView.reloadData()
+            //tableView.reloadRows(at: [indexPathInEntry], with: .left)
+            self.updateSection(direction: "L")
+            }
+            else{
+                showErrorMessage(errorNO: 2)
+            }
+            
+            
+        }
+        else{
+        if (!entries[keyEntries[indexPath.section - 1]]![indexPath.row].isSelected!){
             if(choosedCountiesList.count < MAXIMUM_COUNTRIES){
             
-            entries[keyEntries[indexPath.section]]![indexPath.row].isSelected = true
+            entries[keyEntries[indexPath.section - 1]]![indexPath.row].isSelected = true
            if let cell = tableView.cellForRow(at: indexPath) as? AllCountriesTableViewCell {
             
               cell.accessoryType = .checkmark
-              choosedCountiesList.append(entries[keyEntries[indexPath.section]]![indexPath.row])
+              choosedCountiesList.append(entries[keyEntries[indexPath.section - 1]]![indexPath.row])
+            ListString.append(entries[keyEntries[indexPath.section - 1]]![indexPath.row].code)
             
-            
+            self.updateSection(direction: "R")
                 }
           
             }
@@ -87,13 +139,13 @@ class AllCountriesTableViewController: UITableViewController {
         }
         else{
             if(choosedCountiesList.count > MINIMUM_COUNTRIES){
-            entries[keyEntries[indexPath.section]]![indexPath.row].isSelected = false
+            entries[keyEntries[indexPath.section - 1]]![indexPath.row].isSelected = false
             if let cell = tableView.cellForRow(at: indexPath) as? AllCountriesTableViewCell {
                 
                cell.accessoryType = .none
-                choosedCountiesList.remove(at: searchForIndexInCoosedCountries(searchCode: entries[keyEntries[indexPath.section]]![indexPath.row].code)!)
-                
-                
+                choosedCountiesList.remove(at: searchForIndexInCoosedCountries(searchCode: entries[keyEntries[indexPath.section - 1]]![indexPath.row].code)!)
+                ListString.remove(at: searchForIndexInStringsList(SearchCode: entries[keyEntries[indexPath.section - 1]]![indexPath.row].code))
+                updateSection(direction: "L")
             }
             }
             else{
@@ -102,8 +154,19 @@ class AllCountriesTableViewController: UITableViewController {
         }
     
     }
-    
+        
+        func tableView(_ tableView : UITableView, willDisplayHeaderView: UIView, forSection: Int){
+            if let headerView = view as? UITableViewHeaderFooterView{
+                headerView.contentView.backgroundColor = #colorLiteral(red: 0.1215686275, green: 0.1294117647, blue: 0.1411764706, alpha: 1)
+                headerView.textLabel?.textColor = .white
+            }
+        }
+       
+        //reloadSections(IndexSet(integersIn:Range(0...0)), with: UITableView.RowAnimation.top)
+        //reloadSections(IndexSet(0,0), with: UITableView.RowAnimation.right)
+        
 
+    }
     
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -167,5 +230,39 @@ class AllCountriesTableViewController: UITableViewController {
         }
         alert.addAction(UIAlertAction(title: "OK",style: .default))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    
+    private func updateSection(direction : Character){
+        
+        
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            // Download file or perform expensive task
+            
+            DispatchQueue.main.async {
+                switch direction{
+                case "L":
+                    
+                    self.tableView.reloadSections([0], with: UITableView.RowAnimation.left)
+                    
+                default:
+                    
+                    self.tableView.reloadSections([0], with: UITableView.RowAnimation.right)
+                }
+                
+            }
+        }
+        
+    }
+    
+    
+    private func updateData(){
+        DispatchQueue.global(qos: .userInitiated).async {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
 }

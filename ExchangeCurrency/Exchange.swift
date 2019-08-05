@@ -10,6 +10,7 @@ import Foundation
 let MinimumAlert = "Sorry, You have reached the minmum number of countries (2). You can't remove more"
 let MaximumAlert = "Sorry, You have reached the maximum number of countries (10). You can't add more"
 
+let defaults = UserDefaults.standard
 let MAXIMUM_COUNTRIES = 10
 let MINIMUM_COUNTRIES = 2
 let url = "http://www.apilayer.net/api/live?access_key=13557f9e94479f74ae1b455adf1b62f4" // API of currencies rate
@@ -19,13 +20,18 @@ var keyEntries = [Character]()                                              //no
 var entries : Dictionary = [Character:[Country]]()
 var fetched = false
 var choosedCountiesList = [Country]()
+var choosedCurrency : ChoosedValue!
+var CurrencyAmount : Float = 0.0
+var isActive = Bool()
+var ListString = [String]()
+var MainCurrencyName = String()
 
 struct ValuesOfCurrenciesInUSD : Decodable {
     var quotes : [String : Float]
 }
 
 
-struct Country : Decodable{
+struct Country : Decodable, Encodable{
     
     var symbol : String
     var name : String
@@ -110,16 +116,34 @@ func searchForIndexInCoosedCountries(searchCode : String) -> Int?{
 
 // to Set the default Coutries ---------- NOT FINISHED YET
 func defaultSetting(){
-    if (choosedCountiesList.count == 0){
+    if (choosedCountiesList.count == 0 && ListString.count == 0){
     var myDefaultCountrty = searchForCountryByCode(searchCode: "USD")
     choosedCountiesList.append(myDefaultCountrty)
+        ListString.append("USD")
     myDefaultCountrty = searchForCountryByCode(searchCode: "EUR")
     choosedCountiesList.append(myDefaultCountrty)
-    
+    choosedCurrency = ChoosedValue(myCountry: searchForCountryByCode(searchCode: "USD"))
+        ListString.append("EUR")
+        MainCurrencyName = "USD"
+    isActive = true
+    defaults.set(isActive, forKey: "isActive")
     }
     else
-    {return}
+    {
+        return
+    }
 }
+
+func UserSetting(){
+    
+    for name in ListString{
+        choosedCountiesList.append(searchForCountryByCode(searchCode: name))
+    }
+    let tempCountry = searchForCountryByCode(searchCode: MainCurrencyName)
+    
+    choosedCurrency = ChoosedValue(myCountry: tempCountry)
+}
+
 
 func searchForCountryByCode(searchCode : String) -> Country{
     let notFound = Country(givenCode: "notFound")
@@ -134,5 +158,32 @@ func searchForCountryByCode(searchCode : String) -> Country{
     }
     return notFound
 }
+
+func searchForIndexpathInEntries(searchCode : String) -> (Int,Character)!{
+    
+    let firstChar = Array(searchCode)[0]
+    
+    for i in 0 ..< (entries[firstChar]!.count){
+        if(entries[firstChar]![i].code.elementsEqual(searchCode)){
+            return (i,firstChar)
+        }
+    }
+    
+    return nil
+}
+
+func searchForIndexInStringsList(SearchCode : String ) -> Int{
+    return ListString.firstIndex(where : {(item) -> Bool in
+        item.elementsEqual(SearchCode)
+    })!
+}
+
+func calculateRateBetweenCurrencies(CurrencyOneToUSD: Float, CurrencyTwotoUSD : Float) -> (Float, Float){
+    let rate = CurrencyOneToUSD / CurrencyTwotoUSD
+    let reverseRate = CurrencyTwotoUSD / CurrencyOneToUSD
+    
+    return (rate, reverseRate)
+}
+
 
 
