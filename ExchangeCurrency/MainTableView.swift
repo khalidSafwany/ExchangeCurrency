@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 
 class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
-   
+   private var keyBoard = false
     
     private struct MyCell {
         static var cellSnapShot: UIView? = nil
@@ -84,7 +84,8 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
        
     
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillAppear), name: UIResponder.keyboardWillShowNotification, object: nil)
+
         
         
         
@@ -101,10 +102,15 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
     }
     
+    @objc func keyboardWillAppear() {
+        keyBoard = true
+    }
+    
     @objc func doneClicked(){
         self.ValueInputTextField.endEditing(true)
         CurrencyAmount = (ValueInputTextField.text! as NSString).floatValue
         self.MainTableView.reloadData()
+        keyBoard = false
         
         
     }
@@ -267,6 +273,13 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
        return choosedCountiesList.count
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if(keyBoard){
+            keyBoard = false
+            self.ValueInputTextField.resignFirstResponder()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let mainCell = MainTableView.dequeueReusableCell(withIdentifier: "MainTableCell", for: indexPath) as? MainTableViewCell
@@ -349,6 +362,11 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         else{
             startApp()
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.ValueInputTextField.resignFirstResponder()
+        keyBoard = false
     }
     
 }
