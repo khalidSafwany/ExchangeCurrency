@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 
 class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
-   private var keyBoard = false
+    private var keyBoard = false
     
     private struct MyCell {
         static var cellSnapShot: UIView? = nil
@@ -19,7 +19,7 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     private struct Path {
         static var initialIndexPath: IndexPath? = nil
     }
-   
+    
     // main controller class of main view
     
     @IBOutlet weak var ChangeValueCountryButton: UIButton!{
@@ -36,62 +36,85 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
     }
     
-   
+    
     
     @IBOutlet weak var MainTableView: UITableView!{
         didSet{
-           MainTableView.delegate = self
-           MainTableView.dataSource = self
+            MainTableView.delegate = self
+            MainTableView.dataSource = self
         }
     }
     
     
     
     @IBAction func viewCurrencyChoose(_ sender: UIButton) {
-    performSegue(withIdentifier:"ChooseTheCurrency" , sender: self)
-    
+        let vc = storyboard?.instantiateViewController(withIdentifier: "ChooseCurrencyTableViewController") as! ChooseCurrencyTableViewController
+        vc.callback = {
+            if (choosedCurrency != nil){
+                self.ChangeValueCountryButton.setBackgroundImage(UIImage(named: choosedCurrency.valueCountry!.flag), for: .normal)
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+        
     }
     
     
     @IBAction func EditButton(_ sender: UIButton) {
-        performSegue(withIdentifier: "ShowAllCountries", sender: self)
+        let vc = storyboard?.instantiateViewController(withIdentifier: "AllCountriesTableViewController") as! AllCountriesTableViewController
+        vc.callback = {
+            self.MainTableView.reloadData()
+        }
+        self.present(vc, animated: true, completion: nil)
     }
     
-   
-
+    
+    
     
     override func viewDidAppear(_ animated: Bool) {
         if(!Connectivity.isConnectedToInternet){
             print("No Connection")
             checkConnectionToRun()
             
-        
+            
+        }
+//        self.MainTableView.reloadData()
+//        if (choosedCurrency != nil){
+//            ChangeValueCountryButton.setBackgroundImage(UIImage(named: choosedCurrency.valueCountry!.flag), for: .normal)
+//        }
     }
-    }
+    
     
    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         // Do any additional setup after loading the view.
         isActive = defaults.bool(forKey: "isActive")
-       
+        
+        if isActive{
+            
+            ListString = UserDefaults.standard.array(forKey:"UserCurrenciesNames" ) as! [String]
+            MainCurrencyName = UserDefaults.standard.string(forKey: "UserMainCurrency")!
+        }
+        
         if(Connectivity.isConnectedToInternet){
             startApp()
         }
         else{
             checkConnectionToRun()
         }
-       
-    
+        
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillAppear), name: UIResponder.keyboardWillShowNotification, object: nil)
-
+        
         
         
         
         let longPress :UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LongPressGestureRecognizer(gestureRecognizer:)))
         self.MainTableView.addGestureRecognizer(longPress)
-       
+        
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
         let doneButton = UIBarButtonItem (barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: self, action: #selector(self.doneClicked))
@@ -129,7 +152,7 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         switch state{
         case.began:
             if (indexPath != nil){
-                 Path.initialIndexPath = indexPath
+                Path.initialIndexPath = indexPath
                 let cell = self.MainTableView.cellForRow(at: indexPath!) as! MainTableViewCell
                 MyCell.cellSnapShot = snapshopOfCell(inputView: cell)
                 var center = cell.center
@@ -206,9 +229,20 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         AF.request(url).responseJSON(completionHandler:{
             response in
-            self.parseData(JSONData: response.data!)
+            switch (response.result){
+            case .success(let _):
+                if let data = response.data {
+                    self.parseData(JSONData: data)
+                }
+            case .failure(let error):
+                print(error)
+                
+            }
             
-        }  )
+            
+            
+            
+        })
         
     }
     
@@ -217,21 +251,21 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func parseData(JSONData : Data){   // parsing the JSON date to the values of currencies struct
         do{
             valuesList = [try JSONDecoder().decode(ValuesOfCurrenciesInUSD.self, from: JSONData)]
-    }catch {
-    
-    print(error)
+        }catch {
+            
+            print(error)
         }
         
         mirgeValuesToCountries()
         calculateEntries(){ () -> () in
             
-        contrustMyview()
+            contrustMyview()
             
-        
+            
         }
         
         fetched = true
-       
+        
         
     }
     
@@ -255,22 +289,26 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             
         }
         else{
-            ListString = defaults.array(forKey:"UserCurrenciesNames" ) as! [String]
-            MainCurrencyName = defaults.string(forKey: "UserMainCurrency")!
-            UserSetting()
+            if let cNames = defaults.array(forKey:"UserCurrenciesNames" ) as? [String] , let UserMainCurrency =   defaults.string(forKey: "UserMainCurrency"){
+                ListString = cNames
+                MainCurrencyName = UserMainCurrency
+                UserSetting()
+            }else{
+                print("Couldn't fetch UserCurrenciesNames or UserMainCurrency")
+            }
         }
         self.updateData()
         if (choosedCurrency != nil){
             ChangeValueCountryButton.setBackgroundImage(UIImage(named: choosedCurrency.valueCountry!.flag), for: .normal)
         }
         
-       
+        
         
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       return choosedCountiesList.count
+        return choosedCountiesList.count
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -290,12 +328,12 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         
         mainCell?.totalValueLabel.text = String(CurrencyAmount * reverseRate)
-     
+        
         return mainCell!
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-       return 1
+        return 1
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -318,7 +356,7 @@ class mainViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
     }
     
-     private func  updateData(){
+    private func  updateData(){
         
         
         

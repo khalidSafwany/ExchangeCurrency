@@ -9,6 +9,10 @@
 import UIKit
 
 class ChooseCurrencyTableViewController: UITableViewController {
+    var callback : (()->())?
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,7 +21,8 @@ class ChooseCurrencyTableViewController: UITableViewController {
     }
     
     @IBAction func ReturnWithoutChangeButton(_ sender: Any) {
-        performSegue(withIdentifier:"ReturnToHome" , sender: self)
+//        performSegue(withIdentifier:"ReturnToHome" , sender: self)
+        self.dismiss(animated: true, completion: nil)
     }
     // MARK: - Table view data source
 
@@ -57,7 +62,9 @@ class ChooseCurrencyTableViewController: UITableViewController {
        
         choosedCurrency.valueCountry = entries[keyEntries[indexPath.section]]![indexPath.row]
         MainCurrencyName = entries[keyEntries[indexPath.section]]![indexPath.row].code
-        performSegue(withIdentifier:"ReturnToHome" , sender: self)
+//        performSegue(withIdentifier:"ReturnToHome" , sender: self)
+        self.callback?()
+        self.dismiss(animated: true, completion: nil)
         
     }
     

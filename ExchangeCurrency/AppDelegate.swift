@@ -29,34 +29,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
 //        
-             defaults.set(ListString, forKey: "UserCurrenciesNames")
-        defaults.set(MainCurrencyName, forKey: "UserMainCurrency")
-        defaults.set(isActive, forKey: "isActive")
+//             defaults.set(ListString, forKey: "UserCurrenciesNames")
+//        defaults.set(MainCurrencyName, forKey: "UserMainCurrency")
+//        defaults.set(isActive, forKey: "isActive")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        isActive = defaults.bool(forKey: "isActive")
-        ListString = defaults.array(forKey:"UserCurrenciesNames" ) as! [String]
-        MainCurrencyName = defaults.string(forKey: "UserMainCurrency")!
+//        isActive = defaults.bool(forKey: "isActive")
+//        ListString = defaults.array(forKey:"UserCurrenciesNames" ) as! [String]
+//        MainCurrencyName = defaults.string(forKey: "UserMainCurrency")!
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface
-        isActive = defaults.bool(forKey: "isActive")
-        if isActive{
-        ListString = defaults.array(forKey:"UserCurrenciesNames" ) as! [String]
-        MainCurrencyName = defaults.string(forKey: "UserMainCurrency")!
-            
-        }
+        
+        
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         
-       defaults.set(ListString, forKey: "UserCurrenciesNames")
-       defaults.set(MainCurrencyName, forKey: "UserMainCurrency")
-       defaults.set(isActive, forKey: "isActive")
+//       defaults.set(ListString, forKey: "UserCurrenciesNames")
+//       defaults.set(MainCurrencyName, forKey: "UserMainCurrency")
+//       defaults.set(isActive, forKey: "isActive")
     }
 
 

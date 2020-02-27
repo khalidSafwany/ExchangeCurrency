@@ -9,12 +9,15 @@
 import UIKit
 
 class AllCountriesTableViewController: UITableViewController {
-    
+    var callback : (()->())?
     
 
     
     @IBAction func SaveCountriesButton(_ sender: UIBarButtonItem) {
-        performSegue(withIdentifier: "ReturnToMainView", sender: self)
+//        performSegue(withIdentifier: "ReturnToMainView", sender: self)
+        self.callback?()
+        self.dismiss(animated: true, completion: nil)
+        
     }
     
     override func viewDidLoad() {

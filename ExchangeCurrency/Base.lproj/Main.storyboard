@@ -13,7 +13,7 @@
         <!--Choose Currency Table View Controller-->
         <scene sceneID="kaX-EX-SEU">
             <objects>
-                <tableViewController id="Nid-Vt-wfZ" customClass="ChooseCurrencyTableViewController" customModule="ExchangeCurrency" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ChooseCurrencyTableViewController" id="Nid-Vt-wfZ" customClass="ChooseCurrencyTableViewController" customModule="ExchangeCurrency" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="dZv-j0-Trg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -121,7 +121,6 @@
                                         </constraints>
                                         <connections>
                                             <action selector="viewCurrencyChoose:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kJP-F6-h00"/>
-                                            <segue destination="Nid-Vt-wfZ" kind="showDetail" identifier="ChooseTheCurrency" id="iN9-1s-2Zg"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -236,7 +235,7 @@
         <!--All Countries Table View Controller-->
         <scene sceneID="Jjx-Mv-eK6">
             <objects>
-                <tableViewController id="fKX-Ii-CaE" customClass="AllCountriesTableViewController" customModule="ExchangeCurrency" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="AllCountriesTableViewController" id="fKX-Ii-CaE" customClass="AllCountriesTableViewController" customModule="ExchangeCurrency" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="white" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="pjE-hl-Dpx">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -324,6 +323,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="bB2-Zc-S95"/>
+        <segue reference="l5l-6d-d6n"/>
     </inferredMetricsTieBreakers>
 </document>

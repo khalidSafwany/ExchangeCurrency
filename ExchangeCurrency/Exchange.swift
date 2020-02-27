@@ -7,6 +7,12 @@
 //
 
 import Foundation
+
+class Configs {
+    static var shared = Configs()
+    private init() {}
+}
+
 let MinimumAlert = "Sorry, You have reached the minmum number of countries (2). You can't remove more"
 let MaximumAlert = "Sorry, You have reached the maximum number of countries (10). You can't add more"
 
@@ -22,9 +28,21 @@ var fetched = false
 var choosedCountiesList = [Country]()
 var choosedCurrency : ChoosedValue!
 var CurrencyAmount : Float = 0.0
-var isActive = Bool()
-var ListString = [String]()
-var MainCurrencyName = String()
+var isActive = Bool(){
+    didSet{
+        UserDefaults.standard.set(isActive, forKey: "isActive")
+    }
+}
+var ListString = [String](){
+    didSet{
+        UserDefaults.standard.set(ListString, forKey: "UserCurrenciesNames")
+    }
+}
+var MainCurrencyName = String(){
+    didSet{
+        UserDefaults.standard.set(MainCurrencyName, forKey: "UserMainCurrency")
+    }
+}
 
 struct ValuesOfCurrenciesInUSD : Decodable {
     var quotes : [String : Float]
